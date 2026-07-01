@@ -137,6 +137,9 @@ a{ color:var(--sage-deep); text-decoration:none; }
 .stat .fig{ font-family:var(--serif); font-size:clamp(2.8rem,6.4vw,4.6rem); font-weight:500; color:var(--ink-deep); letter-spacing:-.03em; line-height:.9; }
 .stat .fig .u{ color:var(--sage-deep); }
 .stat .cap{ font-size:.92rem; color:var(--ink-soft); margin-top:16px; max-width:26ch; }
+.src-mark{ font-size:.62em; color:var(--sage-deep); vertical-align:super; line-height:0; margin-left:1px; }
+.stat-src{ font-size:.72rem; color:var(--ink-soft); opacity:.72; margin-top:18px; letter-spacing:.01em; }
+.stat-src em{ font-style:italic; }
 
 /* ============================================================
    INTERACTIVE — "the measurement question" (dark, dramatic)
@@ -184,7 +187,7 @@ a{ color:var(--sage-deep); text-decoration:none; }
 .feed-item .ft{ font-size:.7rem; font-weight:700; letter-spacing:.05em; text-transform:uppercase; color:var(--sage-deep); }
 .feed-item .fh{ font-family:var(--serif); font-size:1.1rem; color:var(--ink-deep); margin-top:6px; }
 .feed-item .fp{ font-size:.95rem; color:var(--ink-soft); margin-top:4px; }
-.mnote{ font-size:.94rem; color:#8AA19C; margin-top:26px; max-width:62ch; font-style:italic; }
+.mnote{ font-size:clamp(1.08rem,1.6vw,1.28rem); color:var(--accent); margin-top:28px; max-width:62ch; font-style:italic; font-weight:500; border-left:3px solid var(--accent); padding-left:20px; }
 
 /* ============================================================
    THE ARC — company names dominate, editorial masthead scale.
@@ -207,7 +210,7 @@ a{ color:var(--sage-deep); text-decoration:none; }
 .tl-meta{ font-size:.8rem; font-weight:600; letter-spacing:.05em; color:var(--ink-soft); text-transform:uppercase; margin-top:12px; }
 .tl-meta b{ color:var(--sage-deep); font-weight:700; }
 .tl-take{ font-family:var(--serif); font-size:1.12rem; color:var(--ink); margin-top:15px; max-width:60ch; line-height:1.55; }
-.tl-take b{ color:var(--sage-deep); font-weight:500; }
+.tl-take b{ color:#0E8A5B; font-weight:700; }
 
 /* ============================================================
    THREE IDEAS
@@ -241,6 +244,8 @@ a{ color:var(--sage-deep); text-decoration:none; }
 .letter-body{ font-family:var(--serif); font-size:clamp(1.24rem,2.4vw,1.7rem); line-height:1.55; color:#EAF1EE; }
 .letter-body p{ margin-top:1.15em; }
 .letter-body p:first-child{ margin-top:0; }
+.letter-body .klink{ color:var(--accent); font-weight:500; text-decoration:underline; text-decoration-color:rgba(79,184,145,.5); text-underline-offset:3px; transition:color .25s ease, text-decoration-color .25s ease; }
+.letter-body .klink:hover{ color:var(--sage-lit); text-decoration-color:var(--sage-lit); }
 .letter-body p:first-child::first-letter{ font-size:3.4em; float:left; line-height:.72; padding:.06em .12em 0 0; color:var(--sage-lit); font-weight:500; }
 .letter-body em{ color:var(--accent); font-style:italic; }
 .sign{ font-family:var(--serif); font-style:italic; font-size:1.6rem; color:#fff; margin-top:1.3em; }
@@ -307,7 +312,7 @@ a:focus-visible, button:focus-visible{ outline:2px solid var(--sage-deep); outli
 
 <nav class="topbar" id="topbar" aria-label="Quick actions">
   <span class="tb-name">Jason Whitcomb <span>· for ServiceNow.org</span></span>
-  <a class="tb-cta" href="mailto:JasonCWhitcomb@gmail.com?subject=Coffee%3F%20%E2%80%94%20Jason%20Whitcomb%2C%20ServiceNow.org">Coffee?</a>
+  <a class="tb-cta" href="mailto:Jason.Whitcomb@servicenow.com?subject=Virtual%20coffee%3F%20%E2%80%94%20Jason%20Whitcomb%2C%20ServiceNow.org">Coffee?</a>
 </nav>
 
 <!-- ========================= HERO ========================= -->
@@ -328,7 +333,7 @@ a:focus-visible, button:focus-visible{ outline:2px solid var(--sage-deep); outli
       <span class="sec-ix" aria-hidden="true">01</span>
       <div>
         <span class="eyebrow">What I see you building</span>
-        <h2 class="h-lead">A .org that competes on <em>outcomes</em>, not on discounts.</h2>
+        <h2 class="h-lead">A dot-org that competes on <em>outcomes</em>, not discounts.</h2>
         <div class="ruler"></div>
       </div>
     </div>
@@ -350,10 +355,11 @@ a:focus-visible, button:focus-visible{ outline:2px solid var(--sage-deep); outli
     </div>
 
     <div class="statstrip">
-      <div class="stat reveal d1"><div class="fig" data-count="90" data-suffix="%+">0</div><div class="cap">of nonprofits say their digital experiences don't yet meet donor and beneficiary needs.</div></div>
-      <div class="stat reveal d2"><div class="fig" data-count="59" data-suffix="%">0</div><div class="cap">believe AI will lift their capacity to raise funds and deliver on mission.</div></div>
+      <div class="stat reveal d1"><div class="fig" data-count="90" data-suffix="%+">0</div><div class="cap">of nonprofits say their digital experiences don't yet meet donor and beneficiary needs.<sup class="src-mark">*</sup></div></div>
+      <div class="stat reveal d2"><div class="fig" data-count="59" data-suffix="%">0</div><div class="cap">believe AI will lift their capacity to raise funds and deliver on mission.<sup class="src-mark">*</sup></div></div>
       <div class="stat reveal d3"><div class="fig"><span class="u">$</span><span data-count="2" data-suffix="M">0</span></div><div class="cap">Partnership for Good Grant investment — now in its second cohort.</div></div>
     </div>
+    <p class="stat-src reveal d1">*Source: ServiceNow &amp; ThoughtLab, <em>Impact AI: Nonprofit Digital Transformation</em>, 2024.</p>
   </div>
 </section>
 
@@ -364,11 +370,11 @@ a:focus-visible, button:focus-visible{ outline:2px solid var(--sage-deep); outli
       <span class="sec-ix" aria-hidden="true">02</span>
       <div>
         <span class="eyebrow">The measurement question</span>
-        <h2 class="h-lead">The value of the storytelling, you've said, is <em>hard to put a number on.</em> I'd like to try.</h2>
+        <h2 class="h-lead">The value of storytelling, you've said, is<br><em>hard to put a number on.</em><br>I'd like to try.</h2>
         <div class="ruler"></div>
       </div>
     </div>
-    <p class="lead reveal d1">Not to flatten the story into a spreadsheet — the story is the point. But the marquee moments already generate outcomes we could prove: commitments made in the room, board members engaged, mentors recruited. <b>Pick a moment and see the kind of spine I'd build behind it.</b></p>
+    <p class="lead reveal d1">Not to flatten the story into a spreadsheet — the story is the point. But the marquee moments already generate outcomes we could prove: commitments made in the room, board members engaged, mentors recruited.<br><b>Pick a moment and see the kind of spine I'd build behind it.</b></p>
 
     <div class="tabs reveal d1" role="tablist" aria-label="ServiceNow.org marquee moments">
       <button class="tab" role="tab" aria-selected="true"  data-key="knowledge">Knowledge</button>
@@ -416,7 +422,7 @@ a:focus-visible, button:focus-visible{ outline:2px solid var(--sage-deep); outli
         <div class="ruler"></div>
       </div>
     </div>
-    <p class="lead arc-intro reveal d1">I didn't plan a career that led here. But looking back, each chapter drilled one muscle this role needs — scale, inclusion, portfolio, intimacy, measurement. The last stop put me inside the house.</p>
+    <p class="lead arc-intro reveal d1">I didn't plan a career that led here. But looking back, each chapter developed one muscle this role needs — scale, inclusion, impact, measurement. The last stop put me inside the house.</p>
 
     <div class="timeline reveal">
       <div class="spine" aria-hidden="true">
@@ -441,21 +447,21 @@ a:focus-visible, button:focus-visible{ outline:2px solid var(--sage-deep); outli
         <span class="node" aria-hidden="true"></span>
         <div class="tl-co">Logitech</div>
         <div class="tl-meta">Head of Global Events, Sponsorships &amp; Community &middot; 2020–2023 &middot; San Jose</div>
-        <p class="tl-take">Founded the experiential team; ran a $10M+ portfolio influencing $35M+ in revenue across NA, EMEA and APJ. <b>Learned to tie every dollar of experience to an outcome leadership could see.</b></p>
+        <p class="tl-take">Founded the experiential team; ran a $10M+ global portfolio — and nurtured community and non-profit programs that connected back to real business outcomes. <b>Learned to tie every dollar of experience to an outcome leadership could see.</b></p>
       </div>
 
       <div class="tl-item">
         <span class="node" aria-hidden="true"></span>
         <div class="tl-co">Google</div>
         <div class="tl-meta">Executive Experiences &middot; 2024–2025 &middot; Mountain View</div>
-        <p class="tl-take">Ran the most senior engagement programs — CEO and leadership summits, activations with Waymo and Wing. <b>Learned how the highest-stakes rooms actually build trust.</b></p>
+        <p class="tl-take">Ran the most senior engagement programs — CEO and CMO summits, activations with Waymo and Wing. <b>Learned how the highest-stakes rooms actually build trust.</b></p>
       </div>
 
       <div class="tl-item now">
         <span class="node" aria-hidden="true"></span>
         <div class="tl-co">ServiceNow</div>
         <div class="tl-meta"><b>Now</b> &middot; Director, Third-Party Event Strategy &middot; 2025–present &middot; San Francisco</div>
-        <p class="tl-take">I own ServiceNow's global third-party event portfolio — a $20M+ budget across Tier 1, Tier 2 and regional programs — and I built the investment framework and measurement standards that link it to pipeline and executive engagement. <b>This is your role, already running. It's just pointed at commercial outcomes instead of the mission.</b></p>
+        <p class="tl-take">I own ServiceNow's global third-party event portfolio across Tier 1 programs, and I built the investment framework and measurement standards that tie it to pipeline and executive engagement. <b>This is your role, already running — just pointed at commercial outcomes instead of the mission.</b></p>
       </div>
     </div>
   </div>
@@ -477,7 +483,7 @@ a:focus-visible, button:focus-visible{ outline:2px solid var(--sage-deep); outli
       <div class="mk">i.</div>
       <div>
         <h3>Give impact the same measurement spine that pipeline gets.</h3>
-        <p>The framework I built for a $20M+ commercial portfolio — investment tiers, ROI standards, executive reporting — transfers almost directly to the Strategic Advisory Board and the .org event portfolio. <b>The result: a board-ready impact narrative that keeps the story and adds the proof</b>, so the value you said is hard to quantify finally has a number beside it.</p>
+        <p>The framework I built for a $20M+ commercial portfolio — investment tiers, ROI standards, executive reporting — transfers almost directly to the Strategic Advisory Board and the .org event portfolio. <b>The result: a board-ready impact narrative that keeps the story and adds the proof</b>, so the value that's always been hard to quantify finally has a number beside it.</p>
       </div>
     </div>
     <div class="idea reveal d1">
@@ -501,7 +507,7 @@ a:focus-visible, button:focus-visible{ outline:2px solid var(--sage-deep); outli
 <section class="pullquote">
   <div class="wrap">
     <span class="pq-mark" aria-hidden="true">“</span>
-    <p class="pq reveal">Being impressive and being useful are <em>not the same thing.</em></p>
+    <p class="pq reveal">A moment isn't measured by the applause. It's measured by <em>whose life is different after it.</em></p>
   </div>
 </section>
 
@@ -512,7 +518,7 @@ a:focus-visible, button:focus-visible{ outline:2px solid var(--sage-deep); outli
       <span class="sec-ix" aria-hidden="true">05</span>
       <div>
         <span class="eyebrow">Why me — the real reason</span>
-        <h2 class="h-lead">I've spent fifteen years in the <em>wings.</em></h2>
+        <h2 class="h-lead">Fifteen years building the moment. Now I want to build <em>a legacy of impact.</em></h2>
       </div>
     </div>
 
@@ -520,8 +526,8 @@ a:focus-visible, button:focus-visible{ outline:2px solid var(--sage-deep); outli
       <div class="letter-body reveal d1">
         <p>There's a moment I know better than almost anything: the house lights fall, the room leans in, and someone I've spent months preparing walks into the light. It's the best feeling in my work — and I've always watched it from the wings, in the dark, which is where the person who builds the moment stands.</p>
         <p>For a long time that was enough. And then, quietly, it wasn't. I realized I didn't want the applause. I wanted the moment to land somewhere that mattered — to be the reason a mission moved, not just the reason a stage looked good.</p>
-        <p>That pull isn't new. At Cisco I spent years building inclusion and community partnerships, much of it alongside nonprofits — the same craft, aimed at who gets access instead of who gets attention. It's why I built Kinetic Culture. Underneath all of it was one stubborn question: <em>did anyone's life actually change?</em></p>
-        <p>So here I am, stepping out of the wings. Sending this without knowing how it lands is uncomfortable — the safe move is to stay backstage, where nothing can be turned down. But the work you care about most is the work you have to be willing to be seen wanting. So I'm letting myself be seen wanting this.</p>
+        <p>That pull isn't new. At Cisco I spent years building inclusion and community partnerships, much of it alongside nonprofits — the same craft, aimed at who gets access instead of who gets attention. It's why I built <a class="klink" href="#" target="_blank" rel="noopener">Kinetic Culture</a>. Underneath all of it was one stubborn question: <em>when the room emptied, whose life was actually different?</em></p>
+        <p>So here I am, reaching for the legacy instead of the applause. Sending this without knowing how it lands is uncomfortable — the safe move is to stay backstage, where nothing can be turned down. But the work you care about most is the work you have to be willing to be seen wanting. So I'm letting myself be seen wanting this.</p>
         <p>Not because it's the next rung on a ladder. Because for once, the room I want to help build is one where the whole point is someone else's life getting better. That's worth walking into the light for.</p>
         <p class="sign">— Jason</p>
       </div>
@@ -548,10 +554,10 @@ a:focus-visible, button:focus-visible{ outline:2px solid var(--sage-deep); outli
   <div class="wrap">
     <span class="sec-ix" aria-hidden="true">06</span>
     <span class="eyebrow" style="margin-top:8px;">The ask</span>
-    <h2 class="h-lead reveal d1">I know this is a bold ask. So let me make it a small one — <em>coffee?</em></h2>
-    <p class="reveal d2">I'm not asking for a seat on the org chart today. I'm asking for thirty minutes: to hear how you see the road ahead, and to show you how I'd take weight off your most visible programs. Bold ask, humble request — and you're a leader I'd learn from either way.</p>
+    <h2 class="h-lead reveal d1">I know this is a bold ask. So let me make it a small one — <em>a virtual coffee?</em></h2>
+    <p class="reveal d2">This all started with the open role on your team you shared with me — it read like the job I've quietly been rehearsing for. I'm not asking for a decision today. I'm asking for thirty minutes: to hear how you see the road ahead, and to show you how I'd take weight off your most visible programs. Bold ask, humble request — and you're a leader I'd learn from either way.</p>
     <div class="cta-row reveal d2">
-      <a class="btn btn-primary" href="mailto:JasonCWhitcomb@gmail.com?subject=Coffee%3F%20%E2%80%94%20Jason%20Whitcomb%2C%20ServiceNow.org">Would you be open to a coffee?</a>
+      <a class="btn btn-primary" href="mailto:Jason.Whitcomb@servicenow.com?subject=Virtual%20coffee%3F%20%E2%80%94%20Jason%20Whitcomb%2C%20ServiceNow.org">Would you be open to a virtual coffee?</a>
       <a class="btn btn-ghost" href="https://www.linkedin.com/in/jcwhitcomb/" target="_blank" rel="noopener">Connect on LinkedIn</a>
     </div>
     <div class="footer">
