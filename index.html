@@ -787,7 +787,8 @@ a:focus-visible, button:focus-visible{ outline:2px solid var(--sage-deep); outli
   var done = document.getElementById('coffeeDone');
   var buttons = ask.querySelectorAll('button[data-answer]');
   var EMAIL = 'JasonCWhitcomb@gmail.com';
-  var ENDPOINT = 'https://formsubmit.co/ajax/' + EMAIL;
+  var ENDPOINT = 'https://api.web3forms.com/submit';
+  var ACCESS_KEY = '0b4df525-5212-41b6-88c9-1fc92cef3766';
   var GUEST = 'Vanessa Smith';
 
   var COPY = {
@@ -830,16 +831,18 @@ a:focus-visible, button:focus-visible{ outline:2px solid var(--sage-deep); outli
       method: 'POST',
       headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
       body: JSON.stringify({
-        _subject: c.subject,
-        _template: 'box',
-        _captcha: 'false',
+        access_key: ACCESS_KEY,
+        subject: c.subject,
+        from_name: 'ServiceNow.org coffee invite',
         name: GUEST,
         answer: answer === 'yes' ? 'YES — would love a virtual coffee' : 'Maybe another time',
         source: 'ServiceNow.org portfolio page — The ask'
       })
     }).then(function(res){
-      if(!res.ok) throw new Error('bad status');
-      render(c);
+      return res.json().catch(function(){ return {}; });
+    }).then(function(data){
+      if(data && data.success){ render(c); }
+      else { fallback(answer); }
     }).catch(function(){
       fallback(answer);
     });
