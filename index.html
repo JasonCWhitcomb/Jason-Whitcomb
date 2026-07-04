@@ -280,6 +280,22 @@ a{ color:var(--sage-deep); text-decoration:none; }
 .btn-primary:hover{ transform:translateY(-3px); box-shadow:0 24px 46px -20px rgba(14,30,36,.7); background:var(--sage-deep); }
 .btn-ghost{ border:1px solid var(--line); color:var(--ink); }
 .btn-ghost:hover{ border-color:var(--sage-deep); color:var(--sage-deep); transform:translateY(-3px); }
+.btn[disabled]{ opacity:.5; pointer-events:none; }
+
+/* --- Interactive coffee invite --- */
+.coffee{ display:flex; flex-direction:column; align-items:flex-start; gap:18px; }
+.coffee-choices{ display:flex; flex-wrap:wrap; gap:14px; }
+.coffee-note{ font-size:.86rem; color:var(--ink-soft); max-width:46ch; line-height:1.55; }
+.coffee-done{ border:1px solid var(--sage); background:var(--sage-tint); border-radius:18px;
+  padding:26px 30px; max-width:52ch; box-shadow:0 2px 3px rgba(46,54,44,.03), 0 16px 34px -22px rgba(46,54,44,.32);
+  animation:coffeePop .5s cubic-bezier(.16,.84,.44,1); }
+.coffee-done .cd-badge{ width:44px; height:44px; border-radius:50%; background:var(--sage-deep); color:#fff;
+  display:flex; align-items:center; justify-content:center; font-size:1.3rem; margin-bottom:14px; }
+.coffee-done .cd-title{ font-family:var(--serif); font-size:clamp(1.35rem,2.4vw,1.7rem); color:var(--ink-deep); line-height:1.15; }
+.coffee-done .cd-body{ margin-top:10px; font-size:1rem; color:var(--ink-soft); line-height:1.65; }
+.coffee-done .cd-body a{ color:var(--sage-deep); font-weight:600; text-decoration:underline; }
+@keyframes coffeePop{ from{ opacity:0; transform:translateY(12px) scale(.98); } to{ opacity:1; transform:none; } }
+@media (prefers-reduced-motion: reduce){ .coffee-done{ animation:none; } }
 .footer{ margin-top:clamp(64px,8vw,94px); padding-top:30px; border-top:1px solid var(--line); font-size:.82rem; color:var(--ink-soft); display:flex; flex-wrap:wrap; gap:8px 22px; justify-content:center; }
 
 a:focus-visible, button:focus-visible{ outline:2px solid var(--sage-deep); outline-offset:3px; border-radius:6px; }
@@ -561,8 +577,16 @@ a:focus-visible, button:focus-visible{ outline:2px solid var(--sage-deep); outli
     <span class="eyebrow" style="margin-top:8px;">The ask</span>
     <h2 class="h-lead reveal d1">I know this is a bold ask. So let me make it a small one —<br><em>a virtual coffee?</em></h2>
     <p class="reveal d2">This all started with the open role on your team — it read like the job I've quietly been rehearsing for. I'm asking for thirty minutes: to hear how you see the road ahead, and to show you how I'd take weight off your most visible programs. Bold ask, humble request — and you're a leader I'd learn from either way.</p>
-    <div class="cta-row reveal d2">
-      <a class="btn btn-primary" href="mailto:Jason.Whitcomb@servicenow.com?subject=Virtual%20coffee%3F%20%E2%80%94%20Jason%20Whitcomb%2C%20ServiceNow.org">Would you be open to a virtual coffee?</a>
+    <div class="coffee reveal d2" id="coffee">
+      <div class="coffee-ask" id="coffeeAsk">
+        <div class="coffee-choices">
+          <button type="button" class="btn btn-primary" data-answer="yes">Yes &mdash; let's find a time &#9749;</button>
+        </div>
+        <span class="coffee-note">One tap and you're done &mdash; no email to write. I'll be notified straightaway and follow up personally to find thirty minutes that work for you.</span>
+      </div>
+      <div class="coffee-done" id="coffeeDone" role="status" aria-live="polite" hidden></div>
+    </div>
+    <div class="cta-row reveal d2" style="margin-top:24px;">
       <a class="btn btn-ghost" href="https://www.linkedin.com/in/jcwhitcomb/" target="_blank" rel="noopener">LinkedIn</a>
     </div>
     <div class="footer">
@@ -752,6 +776,77 @@ a:focus-visible, button:focus-visible{ outline:2px solid var(--sage-deep); outli
       cancelAnimationFrame(raf);
       el.style.transform = 'perspective(1300px) rotateX(0deg) rotateY(0deg)';
     });
+  });
+})();
+
+/* 7) INTERACTIVE COFFEE INVITE — one-tap Yes/No that notifies Jason */
+(function(){
+  var wrap = document.getElementById('coffee');
+  if(!wrap) return;
+  var ask = document.getElementById('coffeeAsk');
+  var done = document.getElementById('coffeeDone');
+  var buttons = ask.querySelectorAll('button[data-answer]');
+  var EMAIL = 'Jason.whitcomb@servicenow.com';
+  var ENDPOINT = 'https://formsubmit.co/ajax/' + EMAIL;
+  var GUEST = 'Vanessa Smith';
+
+  var COPY = {
+    yes: {
+      subject: '☕ ' + GUEST + ' said YES to a virtual coffee — via your ServiceNow.org page',
+      badge: '☕',
+      title: 'Wonderful — that just made my day.',
+      body: "You're all set, and there's nothing more for you to do. Jason has been notified this very second and will follow up personally to lock in thirty minutes that work for you. Thank you, " + GUEST.split(' ')[0] + '.'
+    }
+  };
+
+  function render(state){
+    var badge = state.badge ? '<div class="cd-badge" aria-hidden="true">' + state.badge + '</div>' : '';
+    done.innerHTML = badge +
+      '<div class="cd-title">' + state.title + '</div>' +
+      '<div class="cd-body">' + state.body + '</div>';
+    ask.hidden = true;
+    done.hidden = false;
+  }
+
+  function fallback(answer){
+    var c = COPY[answer];
+    var href = 'mailto:' + EMAIL + '?subject=' + encodeURIComponent(c.subject) +
+      '&body=' + encodeURIComponent('Hi Jason — my answer to the virtual coffee is: ' +
+      (answer === 'yes' ? 'Yes, I’d love to.' : 'Maybe another time.'));
+    render({
+      badge: '✉️',
+      title: 'One quick tap to finish.',
+      body: 'I couldn’t send that for you automatically just now. <a href="' + href + '">Click here to email Jason</a> and he’ll take it from there — your answer is already filled in.'
+    });
+  }
+
+  function choose(answer){
+    var c = COPY[answer];
+    buttons.forEach(function(b){ b.setAttribute('disabled', ''); });
+    var picked = ask.querySelector('button[data-answer="' + answer + '"]');
+    if(picked) picked.textContent = 'Sending…';
+
+    fetch(ENDPOINT, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+      body: JSON.stringify({
+        _subject: c.subject,
+        _template: 'box',
+        _captcha: 'false',
+        name: GUEST,
+        answer: answer === 'yes' ? 'YES — would love a virtual coffee' : 'Maybe another time',
+        source: 'ServiceNow.org portfolio page — The ask'
+      })
+    }).then(function(res){
+      if(!res.ok) throw new Error('bad status');
+      render(c);
+    }).catch(function(){
+      fallback(answer);
+    });
+  }
+
+  buttons.forEach(function(b){
+    b.addEventListener('click', function(){ choose(b.getAttribute('data-answer')); });
   });
 })();
 </script>
