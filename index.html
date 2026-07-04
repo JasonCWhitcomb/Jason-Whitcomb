@@ -298,13 +298,13 @@ a{ color:var(--sage-deep); text-decoration:none; }
 .flow{ display:inline-flex; flex-direction:column; text-align:left; margin:2px auto; }
 .flow-step{ display:flex; align-items:center; gap:13px; padding:9px 0; position:relative; }
 .flow-step:not(:last-child)::after{ content:""; position:absolute; left:12px; top:31px; height:14px; width:2px;
-  background:var(--line); transition:background .5s ease; }
+  background:var(--line); transition:background .25s ease; }
 .flow-step.done:not(:last-child)::after{ background:var(--sage-deep); }
 .flow-node{ flex:0 0 auto; width:26px; height:26px; border-radius:50%; border:2px solid var(--line);
   background:var(--paper); color:transparent; font-size:.78rem; display:flex; align-items:center; justify-content:center;
-  transition:background .45s ease, border-color .45s ease, color .45s ease, transform .45s cubic-bezier(.16,.84,.44,1); }
+  transition:background .22s ease, border-color .22s ease, color .22s ease, transform .22s cubic-bezier(.16,.84,.44,1); }
 .flow-step.done .flow-node{ border-color:var(--sage-deep); background:var(--sage-deep); color:#fff; transform:scale(1.06); }
-.flow-label{ font-size:1rem; color:var(--ink-soft); transition:color .45s ease, font-weight .45s ease; }
+.flow-label{ font-size:1rem; color:var(--ink-soft); transition:color .22s ease, font-weight .22s ease; }
 .flow-step.done .flow-label{ color:var(--ink-deep); font-weight:600; }
 @keyframes coffeePop{ from{ opacity:0; transform:translateY(12px) scale(.98); } to{ opacity:1; transform:none; } }
 @media (prefers-reduced-motion: reduce){ .coffee-done{ animation:none; } .flow-node, .flow-label, .flow-step::after{ transition:none; } }
@@ -852,8 +852,8 @@ a:focus-visible, button:focus-visible{ outline:2px solid var(--sage-deep); outli
     }
     var i = 1; // step 0 already lit on dispatch
     (function next(){
-      if(i < steps.length){ steps[i].classList.add('done'); i++; setTimeout(next, 680); }
-      else { setTimeout(onComplete, 780); }
+      if(i < steps.length){ steps[i].classList.add('done'); i++; setTimeout(next, 340); }
+      else { setTimeout(onComplete, 480); }
     })();
   }
 
