@@ -294,8 +294,20 @@ a{ color:var(--sage-deep); text-decoration:none; }
 .coffee-done .cd-title{ font-family:var(--serif); font-size:clamp(1.35rem,2.4vw,1.7rem); color:var(--ink-deep); line-height:1.15; }
 .coffee-done .cd-body{ margin-top:10px; font-size:1rem; color:var(--ink-soft); line-height:1.65; }
 .coffee-done .cd-body a{ color:var(--sage-deep); font-weight:600; text-decoration:underline; }
+/* ServiceNow-style workflow reveal */
+.flow{ display:inline-flex; flex-direction:column; text-align:left; margin:2px auto; }
+.flow-step{ display:flex; align-items:center; gap:13px; padding:9px 0; position:relative; }
+.flow-step:not(:last-child)::after{ content:""; position:absolute; left:12px; top:31px; height:14px; width:2px;
+  background:var(--line); transition:background .5s ease; }
+.flow-step.done:not(:last-child)::after{ background:var(--sage-deep); }
+.flow-node{ flex:0 0 auto; width:26px; height:26px; border-radius:50%; border:2px solid var(--line);
+  background:var(--paper); color:transparent; font-size:.78rem; display:flex; align-items:center; justify-content:center;
+  transition:background .45s ease, border-color .45s ease, color .45s ease, transform .45s cubic-bezier(.16,.84,.44,1); }
+.flow-step.done .flow-node{ border-color:var(--sage-deep); background:var(--sage-deep); color:#fff; transform:scale(1.06); }
+.flow-label{ font-size:1rem; color:var(--ink-soft); transition:color .45s ease, font-weight .45s ease; }
+.flow-step.done .flow-label{ color:var(--ink-deep); font-weight:600; }
 @keyframes coffeePop{ from{ opacity:0; transform:translateY(12px) scale(.98); } to{ opacity:1; transform:none; } }
-@media (prefers-reduced-motion: reduce){ .coffee-done{ animation:none; } }
+@media (prefers-reduced-motion: reduce){ .coffee-done{ animation:none; } .flow-node, .flow-label, .flow-step::after{ transition:none; } }
 .footer{ margin-top:clamp(64px,8vw,94px); padding-top:30px; border-top:1px solid var(--line); font-size:.82rem; color:var(--ink-soft); display:flex; flex-wrap:wrap; gap:8px 22px; justify-content:center; }
 
 a:focus-visible, button:focus-visible{ outline:2px solid var(--sage-deep); outline-offset:3px; border-radius:6px; }
@@ -795,10 +807,18 @@ a:focus-visible, button:focus-visible{ outline:2px solid var(--sage-deep); outli
     yes: {
       subject: '☕ ' + GUEST + ' said YES to a virtual coffee — via your ServiceNow.org page',
       badge: '☕',
-      title: 'Wonderful — that just made my day.',
-      body: "You're all set, and there's nothing more for you to do. Jason has been notified this very second and will follow up personally to lock in thirty minutes that work for you. Thank you, " + GUEST.split(' ')[0] + '.'
+      title: 'Wonderful — thank you, ' + GUEST.split(' ')[0] + '.',
+      body: "Your note is on its way to Jason right now, and there's nothing more for you to do. He'll coordinate with your team to find thirty minutes that fit your calendar. Looking forward to it."
     }
   };
+
+  var STEPS = ['Request received', "Routed to Jason's team", 'Meeting to be scheduled'];
+  var reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  function pop(){
+    if(reduceMotion) return;
+    done.style.animation = 'none'; void done.offsetWidth; done.style.animation = '';
+  }
 
   function render(state){
     var badge = state.badge ? '<div class="cd-badge" aria-hidden="true">' + state.badge + '</div>' : '';
@@ -807,6 +827,34 @@ a:focus-visible, button:focus-visible{ outline:2px solid var(--sage-deep); outli
       '<div class="cd-body">' + state.body + '</div>';
     ask.hidden = true;
     done.hidden = false;
+    pop();
+  }
+
+  /* ServiceNow-style workflow reveal — steps light up as the request moves along */
+  function renderFlow(){
+    var rows = STEPS.map(function(s){
+      return '<div class="flow-step" role="listitem">' +
+        '<span class="flow-node" aria-hidden="true">✓</span>' +
+        '<span class="flow-label">' + s + '</span></div>';
+    }).join('');
+    done.innerHTML = '<div class="flow" role="list" aria-label="Scheduling workflow">' + rows + '</div>';
+    ask.hidden = true;
+    done.hidden = false;
+    pop();
+    return done.querySelectorAll('.flow-step');
+  }
+
+  function runFlow(steps, onComplete){
+    if(reduceMotion){
+      steps.forEach(function(s){ s.classList.add('done'); });
+      setTimeout(onComplete, 350);
+      return;
+    }
+    var i = 1; // step 0 already lit on dispatch
+    (function next(){
+      if(i < steps.length){ steps[i].classList.add('done'); i++; setTimeout(next, 680); }
+      else { setTimeout(onComplete, 780); }
+    })();
   }
 
   function fallback(answer){
@@ -824,8 +872,10 @@ a:focus-visible, button:focus-visible{ outline:2px solid var(--sage-deep); outli
   function choose(answer){
     var c = COPY[answer];
     buttons.forEach(function(b){ b.setAttribute('disabled', ''); });
-    var picked = ask.querySelector('button[data-answer="' + answer + '"]');
-    if(picked) picked.textContent = 'Sending…';
+
+    // Reveal the workflow and light the first step — the request has been dispatched.
+    var steps = renderFlow();
+    requestAnimationFrame(function(){ steps[0].classList.add('done'); });
 
     fetch(ENDPOINT, {
       method: 'POST',
@@ -841,7 +891,7 @@ a:focus-visible, button:focus-visible{ outline:2px solid var(--sage-deep); outli
     }).then(function(res){
       return res.json().catch(function(){ return {}; });
     }).then(function(data){
-      if(data && data.success){ render(c); }
+      if(data && data.success){ runFlow(steps, function(){ render(c); }); }
       else { fallback(answer); }
     }).catch(function(){
       fallback(answer);
